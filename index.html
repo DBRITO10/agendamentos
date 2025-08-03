@@ -3,27 +3,25 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8" />
-  <title>AGENDAMENTO/SIMONETTI</title>
+  <title>AGENDAMENTO - MÓVEIS SIMONETTI</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Libs -->
+  <!-- Bibliotecas -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 
-  <!-- CSS DataTables -->
+  <!-- CSS do DataTables -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
-  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
 
   <style>
     :root {
-      --cor-fundo-dashboard: #1e1e2f;
-      --cor-cabecalho: linear-gradient(90deg, #00c6ff, #0072ff);
+      --cor-fundo-dashboard: #330000;
+      --cor-cabecalho: linear-gradient(90deg, #b30000, #800000);
       --cor-texto-cabecalho: #ffffff;
-      --cor-linha-par: #2b2b40;
-      --cor-linha-impar: #242437;
-      --cor-filtro: #3a3a5a;
+      --cor-linha-par: #4d0000;
+      --cor-linha-impar: #3a0000;
+      --cor-filtro: #660000;
     }
 
     body {
@@ -32,27 +30,35 @@
       color: white;
       padding: 10px;
       margin: 0;
-      box-sizing: border-box;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    header img {
+      max-width: 180px;
+      height: auto;
     }
 
     h1 {
-      margin-bottom: 16px;
-      color: #ffffff;
+      color: white;
       font-size: 6vw;
-      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 20px;
     }
 
     @media (min-width: 768px) {
       h1 {
         font-size: 28px;
-        text-align: left;
       }
     }
 
     table {
       width: 100%;
-      font-size: 13px;
       border-collapse: collapse;
+      font-size: 13px;
     }
 
     thead tr th {
@@ -76,11 +82,6 @@
       border-bottom: 1px solid #444;
       white-space: nowrap;
       text-align: center;
-    }
-
-    thead tr.filters th {
-      background: #2b2b40;
-      padding: 4px;
     }
 
     .filter-select {
@@ -116,15 +117,20 @@
       .filter-select {
         font-size: 14px;
       }
-      td,
-      th {
+      td, th {
         font-size: 12px;
       }
     }
   </style>
 </head>
 <body>
-  <h1>AGENDAMENTO/SIMONETTI</h1>
+
+  <header>
+    <!-- Coloque aqui o caminho da logo (ou envie para eu incluir diretamente) -->
+    <img src="logo-simonetti.png" alt="Logo Móveis Simonetti" />
+    <h1>AGENDAMENTO - MÓVEIS SIMONETTI</h1>
+  </header>
+
   <table id="planilha" class="display nowrap">
     <thead>
       <tr class="headers"></tr>
@@ -186,8 +192,7 @@
         searching: true,
         info: false,
         scrollX: true,
-        autoWidth: false,
-        fixedHeader: { header: true, headerOffset: 0 }
+        autoWidth: false
       });
 
       table.columns().every(function (i) {
