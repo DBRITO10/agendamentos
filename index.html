@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <title>RECEBIMENTO/SIMONETTI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Libs -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+  <!-- CSS DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css" />
+  <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.4.0/css/fixedHeader.dataTables.min.css">
+
+  <style>
+    :root {
+      --cor-fundo-dashboard: #1e1e2f;
+      --cor-cabecalho: linear-gradient(90deg, #00c6ff, #0072ff);
+      --cor-texto-cabecalho: #ffffff;
+      --cor-linha-par: #2b2b40;
+      --cor-linha-impar: #242437;
+      --cor-filtro: #3a3a5a;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--cor-fundo-dashboard);
+      color: white;
+      padding: 10px;
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      margin-bottom: 16px;
+      color: #ffffff;
+      font-size: 6vw;
+      text-align: center;
+    }
+
+    @media (min-width: 768px) {
+      h1 {
+        font-size: 28px;
+        text-align: left;
+      }
+    }
+
+    table {
+      width: 100%;
+      font-size: 13px;
+      border-collapse: collapse;
+    }
+
+    thead tr th {
+      background: var(--cor-cabecalho);
+      color: var(--cor-texto-cabecalho);
+      padding: 8px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: var(--cor-linha-par);
+    }
+
+    tbody tr:nth-child(odd) {
+      background-color: var(--cor-linha-impar);
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #444;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    thead tr.filters th {
+      background: #2b2b40;
+      padding: 4px;
+    }
+
+    .filter-select {
+      width: 100%;
+      padding: 6px;
+      font-size: 13px;
+      background: var(--cor-filtro);
+      border: none;
+      border-radius: 4px;
+      color: #eee;
+      text-align: center;
+    }
+
+    table.dataTable th,
+    table.dataTable td {
+      min-width: 120px;
+      text-align: center;
+    }
+
+    div.dataTables_wrapper {
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      div.dataTables_wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      table.dataTable {
+        display: block;
+        width: max-content;
+      }
+      .filter-select {
+        font-size: 14px;
+      }
+      td,
+      th {
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>RECEBIMENTO/SIMONETTI</h1>
+  <table id="planilha" class="display nowrap">
+    <thead>
+      <tr class="headers"></tr>
+      <tr class="filters"></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const sheetID = "13HL_sWY8BOIoJml3WOMqL-FqDazMgrPDIIoNnJey8ss";
+    const gid = "0";
+    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gid}`;
+
+    Papa.parse(csvUrl, {
+      download: true,
+      header: true,
+      complete: function (results) {
+        const data = results.data;
+        if (!data.length || Object.keys(data[0]).length === 0) {
+          alert("Falha ao carregar dados.");
+          return;
+        }
+
+        const headerRow = document.querySelector("#planilha thead tr.headers");
+        const filterRow = document.querySelector("#planilha thead tr.filters");
+        const tableBody = document.querySelector("#planilha tbody");
+
+        const colunas = results.meta.fields;
+
+        colunas.forEach(col => {
+          headerRow.innerHTML += `<th>${col}</th>`;
+          filterRow.innerHTML += `<th><select class="filter-select"><option value="">Filtrar</option></select></th>`;
+        });
+
+        data.forEach(row => {
+          let rowHtml = "<tr>";
+          colunas.forEach(col => {
+            rowHtml += `<td>${row[col] || ""}</td>`;
+          });
+          rowHtml += "</tr>";
+          tableBody.innerHTML += rowHtml;
+        });
+
+        const table = $("#planilha").DataTable({
+          paging: false,
+          searching: true,
+          info: false,
+          scrollX: true,
+          autoWidth: false,
+          fixedHeader: { header: true, headerOffset: 0 }
+        });
+
+        table.columns().every(function (i) {
+          const column = this;
+          const select = $(filterRow).find("select").eq(i);
+          column.data().unique().sort().each(function (d) {
+            select.append(`<option value="${d}">${d}</option>`);
+          });
+          select.on("change", function () {
+            const val = $.fn.dataTable.util.escapeRegex($(this).val());
+            column.search(val ? "^" + val + "$" : "", true, false).draw();
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
