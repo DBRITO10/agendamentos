@@ -135,60 +135,76 @@
 
   <script>
     const sheetID = "13HL_sWY8BOIoJml3WOMqL-FqDazMgrPDIIoNnJey8ss";
-    const gid = "0";
-    const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gid}`;
+    const gidPinheiros = "0";
+    const gidSerra = "1527150749";
 
-    Papa.parse(csvUrl, {
-      download: true,
-      header: true,
-      complete: function (results) {
-        const data = results.data;
-        if (!data.length || Object.keys(data[0]).length === 0) {
-          alert("Falha ao carregar dados.");
-          return;
+    const urls = [
+      `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gidPinheiros}`,
+      `https://docs.google.com/spreadsheets/d/${sheetID}/export?format=csv&gid=${gidSerra}`
+    ];
+
+    let allData = [];
+    let colunas = [];
+
+    function carregarDados(url, callback) {
+      Papa.parse(url, {
+        download: true,
+        header: true,
+        complete: function(results) {
+          if (colunas.length === 0) {
+            colunas = results.meta.fields;
+          }
+          allData = allData.concat(results.data);
+          callback();
         }
+      });
+    }
 
-        const headerRow = document.querySelector("#planilha thead tr.headers");
-        const filterRow = document.querySelector("#planilha thead tr.filters");
-        const tableBody = document.querySelector("#planilha tbody");
+    function inicializarTabela() {
+      if (allData.length === 0) return;
 
-        const colunas = results.meta.fields;
+      const headerRow = document.querySelector("#planilha thead tr.headers");
+      const filterRow = document.querySelector("#planilha thead tr.filters");
+      const tableBody = document.querySelector("#planilha tbody");
 
+      colunas.forEach(col => {
+        headerRow.innerHTML += `<th>${col}</th>`;
+        filterRow.innerHTML += `<th><select class="filter-select"><option value="">Filtrar</option></select></th>`;
+      });
+
+      allData.forEach(row => {
+        let rowHtml = "<tr>";
         colunas.forEach(col => {
-          headerRow.innerHTML += `<th>${col}</th>`;
-          filterRow.innerHTML += `<th><select class="filter-select"><option value="">Filtrar</option></select></th>`;
+          rowHtml += `<td>${row[col] || ""}</td>`;
         });
+        rowHtml += "</tr>";
+        tableBody.innerHTML += rowHtml;
+      });
 
-        data.forEach(row => {
-          let rowHtml = "<tr>";
-          colunas.forEach(col => {
-            rowHtml += `<td>${row[col] || ""}</td>`;
-          });
-          rowHtml += "</tr>";
-          tableBody.innerHTML += rowHtml;
-        });
+      const table = $("#planilha").DataTable({
+        paging: false,
+        searching: true,
+        info: false,
+        scrollX: true,
+        autoWidth: false,
+        fixedHeader: { header: true, headerOffset: 0 }
+      });
 
-        const table = $("#planilha").DataTable({
-          paging: false,
-          searching: true,
-          info: false,
-          scrollX: true,
-          autoWidth: false,
-          fixedHeader: { header: true, headerOffset: 0 }
+      table.columns().every(function (i) {
+        const column = this;
+        const select = $(filterRow).find("select").eq(i);
+        column.data().unique().sort().each(function (d) {
+          select.append(`<option value="${d}">${d}</option>`);
         });
+        select.on("change", function () {
+          const val = $.fn.dataTable.util.escapeRegex($(this).val());
+          column.search(val ? "^" + val + "$" : "", true, false).draw();
+        });
+      });
+    }
 
-        table.columns().every(function (i) {
-          const column = this;
-          const select = $(filterRow).find("select").eq(i);
-          column.data().unique().sort().each(function (d) {
-            select.append(`<option value="${d}">${d}</option>`);
-          });
-          select.on("change", function () {
-            const val = $.fn.dataTable.util.escapeRegex($(this).val());
-            column.search(val ? "^" + val + "$" : "", true, false).draw();
-          });
-        });
-      }
+    carregarDados(urls[0], function() {
+      carregarDados(urls[1], inicializarTabela);
     });
   </script>
 </body>
