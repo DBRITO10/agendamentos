@@ -49,19 +49,27 @@
       }
     }
 
-    /* Tabela alinhada */
+    /* Container com scroll horizontal */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #660000;
+      border-radius: 6px;
+    }
+
     table {
       border-collapse: collapse;
       font-size: 13px;
-      table-layout: fixed; /* Mantém alinhamento */
       width: 100%;
-      min-width: 1000px; /* Para scroll horizontal no mobile */
+      /* REMOVER table-layout fixed para ajuste automático */
+      /* table-layout: fixed; */
+      min-width: 800px; /* evita estourar demais, mas menor que 1000px */
     }
 
     thead tr th {
       background: var(--cor-cabecalho);
       color: var(--cor-texto-cabecalho);
-      padding: 10px;
+      padding: 10px 6px;
       text-align: center;
       font-weight: bold;
       white-space: nowrap;
@@ -76,28 +84,28 @@
     }
 
     td {
-      padding: 10px;
+      padding: 8px 6px;
       border-bottom: 1px solid #444;
       white-space: nowrap;
       text-align: center;
     }
 
-    /* Larguras específicas para cada coluna */
-    #planilha th:nth-child(1), #planilha td:nth-child(1) { min-width: 80px; }   /* Senha */
-    #planilha th:nth-child(2), #planilha td:nth-child(2) { min-width: 100px; }  /* Data */
-    #planilha th:nth-child(3), #planilha td:nth-child(3) { min-width: 120px; }  /* Central */
-    #planilha th:nth-child(4), #planilha td:nth-child(4) { min-width: 150px; }  /* Carga/Transporte */
-    #planilha th:nth-child(5), #planilha td:nth-child(5) { min-width: 120px; }  /* Ordem de Compra */
-    #planilha th:nth-child(6), #planilha td:nth-child(6) { min-width: 100px; }  /* Notas */
-    #planilha th:nth-child(7), #planilha td:nth-child(7) { min-width: 130px; }  /* Status da Carga */
-    #planilha th:nth-child(8), #planilha td:nth-child(8) { min-width: 150px; }  /* Fornecedor */
-    #planilha th:nth-child(9), #planilha td:nth-child(9) { min-width: 150px; }  /* Tipo de Produto */
-    #planilha th:nth-child(10), #planilha td:nth-child(10) { min-width: 150px; }/* Linha de Separação */
-    #planilha th:nth-child(11), #planilha td:nth-child(11) { min-width: 120px; }/* Qtde Volumes */
+    /* Defina largura fixa em % para as colunas, somando 100% */
+    #planilha th:nth-child(1), #planilha td:nth-child(1) { width: 7%; }   /* Senha */
+    #planilha th:nth-child(2), #planilha td:nth-child(2) { width: 9%; }   /* Data */
+    #planilha th:nth-child(3), #planilha td:nth-child(3) { width: 11%; }  /* Central */
+    #planilha th:nth-child(4), #planilha td:nth-child(4) { width: 13%; }  /* Carga/Transporte */
+    #planilha th:nth-child(5), #planilha td:nth-child(5) { width: 10%; }  /* Ordem de Compra */
+    #planilha th:nth-child(6), #planilha td:nth-child(6) { width: 8%; }   /* Notas */
+    #planilha th:nth-child(7), #planilha td:nth-child(7) { width: 11%; }  /* Status da Carga */
+    #planilha th:nth-child(8), #planilha td:nth-child(8) { width: 12%; }  /* Fornecedor */
+    #planilha th:nth-child(9), #planilha td:nth-child(9) { width: 12%; }  /* Tipo de Produto */
+    #planilha th:nth-child(10), #planilha td:nth-child(10) { width: 12%; }/* Linha de Separação */
+    #planilha th:nth-child(11), #planilha td:nth-child(11) { width: 8%; } /* Qtde Volumes */
 
     /* Filtros */
     .filter-select {
-      width: 95%;
+      width: 100%;
       padding: 6px;
       font-size: 13px;
       background: var(--cor-filtro);
@@ -105,31 +113,27 @@
       border-radius: 4px;
       color: #eee;
       text-align: center;
-      margin: 0 auto;
-      display: block;
-    }
-
-    /* Rolagem horizontal */
-    div.dataTables_wrapper {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
+      box-sizing: border-box;
     }
 
     /* Ajustes Mobile */
     @media (max-width: 768px) {
+      h1 {
+        font-size: 22px;
+      }
+
       .filter-select {
         font-size: 14px;
         padding: 8px;
       }
 
       td, th {
-        font-size: 13px;
-        padding: 8px;
+        font-size: 12px;
+        padding: 6px 4px;
       }
 
-      table.dataTable {
-        min-width: 1000px;
-        display: block;
+      table {
+        min-width: 700px;
       }
     }
   </style>
@@ -203,7 +207,12 @@
         searching: true,
         info: false,
         scrollX: true,
-        autoWidth: false
+        autoWidth: false,
+        language: {
+          search: "Buscar:",
+          zeroRecords: "Nenhum registro encontrado",
+          infoEmpty: "Nenhum dado disponível",
+        }
       });
 
       table.columns().every(function (i) {
