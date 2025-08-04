@@ -40,8 +40,7 @@
     h1 {
       color: white;
       font-size: 6vw;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      margin: 10px 0 20px 0;
     }
 
     @media (min-width: 768px) {
@@ -50,13 +49,13 @@
       }
     }
 
-    /* Tabela e alinhamento */
+    /* Tabela alinhada */
     table {
       border-collapse: collapse;
       font-size: 13px;
-      table-layout: fixed; /* Mantém colunas alinhadas */
+      table-layout: fixed; /* Mantém alinhamento */
       width: 100%;
-      min-width: 900px; /* Ajuda no mobile com scroll horizontal */
+      min-width: 1000px; /* Para scroll horizontal no mobile */
     }
 
     thead tr th {
@@ -83,7 +82,20 @@
       text-align: center;
     }
 
-    /* Filtro */
+    /* Larguras específicas para cada coluna */
+    #planilha th:nth-child(1), #planilha td:nth-child(1) { min-width: 80px; }   /* Senha */
+    #planilha th:nth-child(2), #planilha td:nth-child(2) { min-width: 100px; }  /* Data */
+    #planilha th:nth-child(3), #planilha td:nth-child(3) { min-width: 120px; }  /* Central */
+    #planilha th:nth-child(4), #planilha td:nth-child(4) { min-width: 150px; }  /* Carga/Transporte */
+    #planilha th:nth-child(5), #planilha td:nth-child(5) { min-width: 120px; }  /* Ordem de Compra */
+    #planilha th:nth-child(6), #planilha td:nth-child(6) { min-width: 100px; }  /* Notas */
+    #planilha th:nth-child(7), #planilha td:nth-child(7) { min-width: 130px; }  /* Status da Carga */
+    #planilha th:nth-child(8), #planilha td:nth-child(8) { min-width: 150px; }  /* Fornecedor */
+    #planilha th:nth-child(9), #planilha td:nth-child(9) { min-width: 150px; }  /* Tipo de Produto */
+    #planilha th:nth-child(10), #planilha td:nth-child(10) { min-width: 150px; }/* Linha de Separação */
+    #planilha th:nth-child(11), #planilha td:nth-child(11) { min-width: 120px; }/* Qtde Volumes */
+
+    /* Filtros */
     .filter-select {
       width: 95%;
       padding: 6px;
@@ -116,7 +128,7 @@
       }
 
       table.dataTable {
-        min-width: 900px; /* Mantém largura mínima para leitura */
+        min-width: 1000px;
         display: block;
       }
     }
