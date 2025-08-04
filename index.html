@@ -61,15 +61,13 @@
       border-collapse: collapse;
       font-size: 13px;
       width: 100%;
-      /* REMOVER table-layout fixed para ajuste automático */
-      /* table-layout: fixed; */
-      min-width: 800px; /* evita estourar demais, mas menor que 1000px */
+      min-width: 800px;
     }
 
     thead tr th {
       background: var(--cor-cabecalho);
       color: var(--cor-texto-cabecalho);
-      padding: 10px 6px;
+      padding: 8px 12px;
       text-align: center;
       font-weight: bold;
       white-space: nowrap;
@@ -84,30 +82,30 @@
     }
 
     td {
-      padding: 8px 6px;
+      padding: 8px 12px;
       border-bottom: 1px solid #444;
       white-space: nowrap;
       text-align: center;
     }
 
-    /* Defina largura fixa em % para as colunas, somando 100% */
-    #planilha th:nth-child(1), #planilha td:nth-child(1) { width: 9%; }   /* Senha */
-    #planilha th:nth-child(2), #planilha td:nth-child(2) { width: 9%; }   /* Data */
-    #planilha th:nth-child(3), #planilha td:nth-child(3) { width: 11%; }  /* Central */
-    #planilha th:nth-child(4), #planilha td:nth-child(4) { width: 13%; }  /* Carga/Transporte */
-    #planilha th:nth-child(5), #planilha td:nth-child(5) { width: 10%; }  /* Ordem de Compra */
-    #planilha th:nth-child(6), #planilha td:nth-child(6) { width: 10%; }  /* Notas */
-    #planilha th:nth-child(7), #planilha td:nth-child(7) { width: 11%; }  /* Status da Carga */
-    #planilha th:nth-child(8), #planilha td:nth-child(8) { width: 12%; }  /* Fornecedor */
-    #planilha th:nth-child(9), #planilha td:nth-child(9) { width: 12%; }  /* Tipo de Produto */
-    #planilha th:nth-child(10), #planilha td:nth-child(10) { width: 12%; }/* Linha de Separação */
-    #planilha th:nth-child(11), #planilha td:nth-child(11) { width: 9%; } /* Qtde Volumes */
+    /* Larguras fixas e mínimas para as colunas, garantindo alinhamento e filtro visível */
+    #planilha th:nth-child(1), #planilha td:nth-child(1) { min-width: 70px; width: 9%; }
+    #planilha th:nth-child(2), #planilha td:nth-child(2) { min-width: 70px; width: 9%; }
+    #planilha th:nth-child(3), #planilha td:nth-child(3) { min-width: 90px; width: 11%; }
+    #planilha th:nth-child(4), #planilha td:nth-child(4) { min-width: 110px; width: 13%; }
+    #planilha th:nth-child(5), #planilha td:nth-child(5) { min-width: 90px; width: 10%; }
+    #planilha th:nth-child(6), #planilha td:nth-child(6) { min-width: 90px; width: 10%; }
+    #planilha th:nth-child(7), #planilha td:nth-child(7) { min-width: 100px; width: 11%; }
+    #planilha th:nth-child(8), #planilha td:nth-child(8) { min-width: 100px; width: 12%; }
+    #planilha th:nth-child(9), #planilha td:nth-child(9) { min-width: 100px; width: 12%; }
+    #planilha th:nth-child(10), #planilha td:nth-child(10) { min-width: 100px; width: 12%; }
+    #planilha th:nth-child(11), #planilha td:nth-child(11) { min-width: 70px; width: 9%; }
 
     /* Filtros */
     .filter-select {
       width: 100%;
       min-width: 70px;
-      padding: 4px 6px;
+      padding: 6px 8px;
       font-size: 13px;
       background: var(--cor-filtro);
       border: none;
@@ -130,7 +128,7 @@
 
       td, th {
         font-size: 12px;
-        padding: 6px 4px;
+        padding: 6px 8px;
       }
 
       table {
