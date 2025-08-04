@@ -50,15 +50,19 @@
       }
     }
 
+    /* Tabela e alinhamento */
     table {
       border-collapse: collapse;
       font-size: 13px;
+      table-layout: fixed; /* Mantém colunas alinhadas */
+      width: 100%;
+      min-width: 900px; /* Ajuda no mobile com scroll horizontal */
     }
 
     thead tr th {
       background: var(--cor-cabecalho);
       color: var(--cor-texto-cabecalho);
-      padding: 8px;
+      padding: 10px;
       text-align: center;
       font-weight: bold;
       white-space: nowrap;
@@ -73,14 +77,15 @@
     }
 
     td {
-      padding: 8px 12px;
+      padding: 10px;
       border-bottom: 1px solid #444;
       white-space: nowrap;
       text-align: center;
     }
 
+    /* Filtro */
     .filter-select {
-      width: 100%;
+      width: 95%;
       padding: 6px;
       font-size: 13px;
       background: var(--cor-filtro);
@@ -88,29 +93,31 @@
       border-radius: 4px;
       color: #eee;
       text-align: center;
+      margin: 0 auto;
+      display: block;
     }
 
+    /* Rolagem horizontal */
     div.dataTables_wrapper {
       overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
+    /* Ajustes Mobile */
     @media (max-width: 768px) {
       .filter-select {
         font-size: 14px;
+        padding: 8px;
       }
 
       td, th {
-        font-size: 12px;
+        font-size: 13px;
+        padding: 8px;
       }
 
       table.dataTable {
-        width: max-content;
+        min-width: 900px; /* Mantém largura mínima para leitura */
         display: block;
-      }
-
-      div.dataTables_wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
       }
     }
   </style>
@@ -122,7 +129,7 @@
   </header>
 
   <div class="table-container">
-    <table id="planilha" class="display nowrap" style="width: 100%;">
+    <table id="planilha" class="display nowrap">
       <thead>
         <tr class="headers"></tr>
         <tr class="filters"></tr>
@@ -191,7 +198,7 @@
         const column = this;
         const select = $(filterRow).find("select").eq(i);
         column.data().unique().sort().each(function (d) {
-          select.append(`<option value="${d}">${d}</option>`);
+          if (d) select.append(`<option value="${d}">${d}</option>`);
         });
         select.on("change", function () {
           const val = $.fn.dataTable.util.escapeRegex($(this).val());
